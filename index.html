@@ -4,87 +4,513 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class 8A - The Awesome Crew</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #1e88e5;
+            --primary-light: #64b5f6;
+            --primary-dark: #0d47a1;
+            --secondary: #ffffff;
+            --accent: #bbdefb;
+            --dark: #0a1f3a;
+            --light: #f5f9ff;
+            --gray: #78909c;
+            --hover: #e3f2fd;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --info: #00bcd4;
+            --purple: #8e24aa;
+            --pink: #e91e63;
+            --orange: #ff5722;
+            --teal: #009688;
+        }
+
+        /* تحسينات شريط التنقل المتقلص */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            padding: 1.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(13, 71, 161, 0.3);
+            z-index: 1000;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        header.compact {
+            padding: 0.8rem 1rem;
+            box-shadow: 0 2px 15px rgba(13, 71, 161, 0.4);
+        }
+
+        header.compact .main-title {
+            font-size: 1.5rem;
+            margin-bottom: 0;
+        }
+
+        header.compact nav {
+            margin-top: 0.5rem;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            display: inline-block;
+            animation: titleAnimation 4s ease-in-out infinite;
+            transition: all 0.5s ease;
+        }
+
+        @keyframes titleAnimation {
+            0%, 100% { 
+                transform: scale(1);
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.5),
+                             0 0 20px rgba(30, 136, 229, 0.5);
+            }
+            50% { 
+                transform: scale(1.05);
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.8),
+                             0 0 30px rgba(30, 136, 229, 0.8),
+                             0 0 40px rgba(30, 136, 229, 0.6);
+            }
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+            transition: all 0.5s ease;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.7s ease;
+        }
+
+        nav a:hover::before {
+            left: 100%;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* تحسينات للصور */
+        .teacher-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            margin: 0 auto 0.8rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .teacher-card:hover .teacher-image {
+            transform: scale(1.1) rotate(5deg);
+            border-color: rgba(255, 255, 255, 1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* تكبير صور الطلاب */
+        .student-image {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+            border: 3px solid var(--primary);
+            margin: 0 auto 0.8rem;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 5px 15px rgba(30, 136, 229, 0.2),
+                inset 0 0 0 4px white;
+            filter: brightness(0.95);
+            cursor: pointer;
+        }
+        
+        .card:hover .student-image {
+            transform: scale(1.15) rotate(5deg);
+            border-color: var(--primary-light);
+            filter: brightness(1.05);
+            box-shadow: 
+                0 8px 25px rgba(30, 136, 229, 0.3),
+                inset 0 0 0 4px white;
+        }
+        
+        /* تحسينات للاستجابة */
+        @media (max-width: 768px) {
+            nav a {
+                font-size: 0.9rem;
+                padding: 0.4rem 1rem;
+            }
+            
+            .student-image {
+                width: 110px;
+                height: 110px;
+            }
+
+            header.compact .main-title {
+                font-size: 1.3rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .student-image {
+                width: 90px;
+                height: 90px;
+            }
+
+            header.compact .main-title {
+                font-size: 1.1rem;
+            }
+
+            header.compact nav a {
+                font-size: 0.8rem;
+                padding: 0.3rem 0.7rem;
+            }
+        }
+        
+        /* تحسينات لقسم المعلومات */
+        .info-card {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            color: white;
+            box-shadow: 0 8px 20px rgba(30, 136, 229, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        .info-card:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(30, 136, 229, 0.5);
+        }
+        
+        .info-number {
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .info-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .info-quote {
+            font-size: 0.9rem;
+            font-style: italic;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        /* تأثيرات إضافية */
+        .pulse-glow {
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                box-shadow: 0 0 5px rgba(30, 136, 229, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 20px rgba(30, 136, 229, 0.8), 0 0 30px rgba(30, 136, 229, 0.6);
+            }
+        }
+
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .rotate-slow {
+            animation: rotateSlow 20s linear infinite;
+        }
+
+        @keyframes rotateSlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .bounce-in {
+            animation: bounceIn 1s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            0% { transform: translateY(30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* تأثيرات خاصة للبطاقات */
+        .card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+        }
+
+        .card:hover::after {
+            left: 100%;
+        }
+
+        /* تأثيرات النص */
+        .text-shimmer {
+            background: linear-gradient(90deg, var(--primary), var(--primary-light), var(--primary));
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s infinite linear;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* تأثيرات خاصة للقادة */
+        .leader-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .leader-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .leader-card:hover::before {
+            opacity: 1;
+        }
+
+        /* تعديل المسافة العلوية للمحتوى */
+        .container {
+            margin-top: 180px;
+            transition: margin-top 0.5s ease;
+        }
+
+        header.compact ~ .container {
+            margin-top: 130px;
+        }
+
+        /* تأثيرات خاصة للجدول */
+        .schedule-table tr {
+            transition: all 0.3s ease;
+        }
+
+        .schedule-table tr:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .subject {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subject::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .subject:hover::before {
+            left: 100%;
+        }
+
+        .subject:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* تأثيرات خاصة للزر العلوي */
+        .back-to-top {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 20px rgba(30, 136, 229, 0.6);
+        }
+    </style>
 </head>
 <body>
     <!-- Floating background elements -->
     <div class="floating-elements">
-        <div class="floating-element" style="width: 100px; height: 100px; top: 10%; left: 5%;"></div>
-        <div class="floating-element" style="width: 150px; height: 150px; top: 60%; left: 80%;"></div>
-        <div class="floating-element" style="width: 80px; height: 80px; top: 30%; left: 70%;"></div>
-        <div class="floating-element" style="width: 120px; height: 120px; top: 80%; left: 20%;"></div>
+        <div class="floating-element rotate-slow" style="width: 100px; height: 100px; top: 10%; left: 5%;"></div>
+        <div class="floating-element floating" style="width: 150px; height: 150px; top: 60%; left: 80%;"></div>
+        <div class="floating-element rotate-slow" style="width: 80px; height: 80px; top: 30%; left: 70%;"></div>
+        <div class="floating-element floating" style="width: 120px; height: 120px; top: 80%; left: 20%;"></div>
+        <div class="floating-element rotate-slow" style="width: 60px; height: 60px; top: 20%; left: 90%;"></div>
+        <div class="floating-element floating" style="width: 90px; height: 90px; top: 70%; left: 10%;"></div>
     </div>
 
-    <header>
+    <header id="main-header">
         <h1 class="main-title">Class 8A - The Awesome Crew</h1>
         <nav>
-            <a href="#leaders">Our Dream Team</a>
-            <a href="#students">The Amazing Students</a>
-            <a href="#teachers">Our Super Teachers</a>
-            <a href="#schedule">Weekly Adventure Plan</a>
+            <a href="#info"><i class="fas fa-chart-bar"></i> Class Info</a>
+            <a href="#leaders"><i class="fas fa-users"></i> Dream Team</a>
+            <a href="#students"><i class="fas fa-user-graduate"></i> Amazing Students</a>
+            <a href="#teachers"><i class="fas fa-chalkboard-teacher"></i> Super Teachers</a>
+            <a href="#schedule"><i class="fas fa-calendar-alt"></i> Weekly Schedule</a>
         </nav>
     </header>
 
     <div class="container">
-        <div class="hero creative-bg">
-            <h2>Welcome to the Coolest Class Ever!</h2>
+        <div class="hero creative-bg bounce-in">
+            <h2 class="text-shimmer">Welcome to the Coolest Class Ever!</h2>
             <p>Get ready to dive into the world of Class 8A - where learning meets fun, and every day is a new adventure! We're not just a class, we're a family of future leaders, innovators, and world-changers.</p>
-            <img src="https://i.ibb.co/SDF1Mdjm/Whats-App-Image-2025-10-30-at-13-18-48-c7131b09.jpg" alt="Our amazing class family">
+            <img src="https://i.ibb.co/SDF1Mdjm/Whats-App-Image-2025-10-30-at-13-18-48-c7131b09.jpg" alt="Our amazing class family" class="pulse-glow">
         </div>
 
-        <!-- Statistics Section -->
-        <section id="stats" class="creative-bg">
-            <h2>By The Numbers</h2>
+        <!-- Information Section -->
+        <section id="info" class="creative-bg fade-in-up">
+            <h2 class="text-shimmer">Class Information & Fun Facts</h2>
             <div class="stats-container">
-                <div class="stat-card pulse-effect">
-                    <div class="stat-number">43</div>
-                    <div class="stat-label">Super Students</div>
+                <div class="info-card floating">
+                    <div class="info-number">43</div>
+                    <div class="info-label">Brilliant Minds</div>
+                    <div class="info-quote">"43 unique stories, one amazing class!"</div>
                 </div>
-                <div class="stat-card pulse-effect">
-                    <div class="stat-number">15</div>
-                    <div class="stat-label">Amazing Teachers</div>
+                <div class="info-card floating">
+                    <div class="info-number">15</div>
+                    <div class="info-label">Inspiring Guides</div>
+                    <div class="info-quote">"15 mentors shaping tomorrow's leaders!"</div>
                 </div>
-                <div class="stat-card pulse-effect">
-                    <div class="stat-number">8</div>
-                    <div class="stat-label">Cool Subjects</div>
+                <div class="info-card floating">
+                    <div class="info-number">8</div>
+                    <div class="info-label">Knowledge Adventures</div>
+                    <div class="info-quote">"8 subjects, endless possibilities!"</div>
                 </div>
-                <div class="stat-card pulse-effect">
-                    <div class="stat-number">5</div>
-                    <div class="stat-label">Fun Days</div>
+                <div class="info-card floating">
+                    <div class="info-number">5</div>
+                    <div class="info-label">Learning Adventures</div>
+                    <div class="info-quote">"5 days of discovery each week!"</div>
                 </div>
             </div>
         </section>
 
         <!-- Class Leaders Section -->
-        <section id="leaders" class="creative-bg">
-            <h2>Our Dream Team Leaders</h2>
+        <section id="leaders" class="creative-bg fade-in-up">
+            <h2 class="text-shimmer">Our Dream Team Leaders</h2>
             <div class="class-leaders">
-                <div class="leader-card glow-effect">
+                <div class="leader-card pulse-glow">
                     <div class="leader-role">Class President</div>
                     <h3>Ahmed Hassan El-Hadidi</h3>
                     <p>The captain of our ship and the sea!</p>
                 </div>
-                <div class="leader-card glow-effect">
+                <div class="leader-card pulse-glow">
                     <div class="leader-role">Vice President</div>
                     <h3>Sara Adel</h3>
                     <p>The awesome right hand!</p>
                 </div>
-                <div class="leader-card glow-effect">
+                <div class="leader-card pulse-glow">
                     <div class="leader-role">Science Whiz</div>
                     <h3>Mohamed Abdulaziz</h3>
                     <p>Making science super cool!</p>
                 </div>
-                <div class="leader-card glow-effect">
+                <div class="leader-card pulse-glow">
                     <div class="leader-role">Sports Star</div>
                     <h3>Jasser Alsebai</h3>
                     <p>Keeping us active and healthy!</p>
                 </div>
-                <div class="leader-card glow-effect">
+                <div class="leader-card pulse-glow">
                     <div class="leader-role">Spirit Guide</div>
                     <h3>Omar Khial</h3>
                     <p>Nourishing our hearts and souls!</p>
                 </div>
-                <div class="leader-card glow-effect">
+                <div class="leader-card pulse-glow">
                     <div class="leader-role">Creative Genius</div>
                     <h3>Ziad Ayman</h3>
                     <p>Making every moment memorable!</p>
@@ -93,227 +519,227 @@
         </section>
 
         <!-- Students Section -->
-        <section id="students" class="creative-bg">
-            <h2>Meet Our Amazing Crew!</h2>
+        <section id="students" class="creative-bg fade-in-up">
+            <h2 class="text-shimmer">Meet Our Amazing Crew!</h2>
             <div class="grid">
                 <!-- All 43 Students -->
                 <div class="card gentle-lift-effect" data-student="Adam Khaled" data-info="Proud member of the 8A family!">
-                    <img src="images\ادم.png" >
+                    <img src="images\ادم.png" class="student-image">
                     <h3>Adam Khaled</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Eyad Abdelhay" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/2196f3/ffffff?text=EA">
+                    <img src="https://via.placeholder.com/130/2196f3/ffffff?text=EA" class="student-image">
                     <h3>Eyad Abdelhay</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Jasser Al-Sebai" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/42a5f5/ffffff?text=JS" >
+                    <img src="https://via.placeholder.com/130/42a5f5/ffffff?text=JS" class="student-image">
                     <h3>Jasser Al-Sebai</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Ziad Ayman" data-info="Proud member of the 8A family!">
-                    <img src="images\ziad.jpg" >
+                    <img src="images\ziad.jpg" class="student-image">
                     <h3>Ziad Ayman</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Diaa Ahmed" data-info="Proud member of the 8A family!">
-                    <img src="images\ضياء.png">
+                    <img src="images\ضياء.png" class="student-image">
                     <h3>Diaa Ahmed</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Omar Khayal" data-info="Proud member of the 8A family!">
-                    <img src="https://i.ibb.co/ymjLkTYx/Whats-App-Image-2025-11-04-at-23-59-47-11886e31.jpg" >
+                    <img src="https://i.ibb.co/ymjLkTYx/Whats-App-Image-2025-11-04-at-23-59-47-11886e31.jpg" class="student-image">
                     <h3>Omar Khial</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Kevin Mina" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/1e88e5/ffffff?text=KM" >
+                    <img src="https://via.placeholder.com/130/1e88e5/ffffff?text=KM" class="student-image">
                     <h3>Kevin Mina</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Malik Amr" data-info="Proud member of the 8A family!">
-                    <img src="images\مالكعمرو.png" >
+                    <img src="images\مالكعمرو.png" class="student-image">
                     <h3>Malek Amr</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Mohamed Abdulaziz" data-info="Proud member of the 8A family!">
-                    <img src="images/mzizo.jpg" >
+                    <img src="images/mzizo.jpg" class="student-image">
                     <h3>Mohamed Abdulaziz</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Mohamed Amr" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/64b5f6/ffffff?text=MA" >
+                    <img src="https://via.placeholder.com/130/64b5f6/ffffff?text=MA" class="student-image">
                     <h3>Mohamed Amr</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Marwan Mahmoud" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/90caf9/ffffff?text=MM" >
+                    <img src="https://via.placeholder.com/130/90caf9/ffffff?text=MM" class="student-image">
                     <h3>Marwan Mahmoud</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Tasneem Ahmed" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/1e88e5/ffffff?text=TA" >
+                    <img src="https://via.placeholder.com/130/1e88e5/ffffff?text=TA" class="student-image">
                     <h3>Tasneem Ahmed</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Jana Mohamed Hassan" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/2196f3/ffffff?text=JM" >
+                    <img src="https://via.placeholder.com/130/2196f3/ffffff?text=JM" class="student-image">
                     <h3>Jana Mohamed Hassan</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Rofana Mina" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/42a5f5/ffffff?text=RM">
+                    <img src="https://via.placeholder.com/130/42a5f5/ffffff?text=RM" class="student-image">
                     <h3>Rovana Mina</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Ritaj Wael" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/64b5f6/ffffff?text=RW" >
+                    <img src="https://via.placeholder.com/130/64b5f6/ffffff?text=RW" class="student-image">
                     <h3>Ritaj Wael</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Rimas Osama" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/90caf9/ffffff?text=RO" >
+                    <img src="https://via.placeholder.com/130/90caf9/ffffff?text=RO" class="student-image">
                     <h3>Rimas Osama</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Sajoud Metwali" data-info="Proud member of the 8A family!">
-                    <img src="images\sgood.jpg" >
+                    <img src="images\sgood.jpg" class="student-image">
                     <h3>Sgood Dawood</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Sama Khaled" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/2196f3/ffffff?text=SK" >
+                    <img src="https://via.placeholder.com/130/2196f3/ffffff?text=SK" class="student-image">
                     <h3>Sama Khaled</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Klara Samuel" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/42a5f5/ffffff?text=KS">
+                    <img src="https://via.placeholder.com/130/42a5f5/ffffff?text=KS" class="student-image">
                     <h3>Klara Samuel</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Marley Samy" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/64b5f6/ffffff?text=MS">
+                    <img src="https://via.placeholder.com/130/64b5f6/ffffff?text=MS" class="student-image">
                     <h3>Marly Samy</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Mariam Ashraf" data-info="Proud member of the 8A family!">
-                    <img src="images\مريم.png" >
+                    <img src="images\مريم.png" class="student-image">
                     <h3>Mariam Ashraf</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Menna Mahmoud" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/1e88e5/ffffff?text=MM" >
+                    <img src="https://via.placeholder.com/130/1e88e5/ffffff?text=MM" class="student-image">
                     <h3>Menna Mahmoud</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Norai Mohamed" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/2196f3/ffffff?text=NM">
+                    <img src="https://via.placeholder.com/130/2196f3/ffffff?text=NM" class="student-image">
                     <h3>Nouray Mohamed</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Ahmed Hassan" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/42a5f5/ffffff?text=AH">
+                    <img src="https://via.placeholder.com/130/42a5f5/ffffff?text=AH" class="student-image">
                     <h3>Ahmed Hassan</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Osama Ahmed" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/64b5f6/ffffff?text=OA" >
+                    <img src="https://via.placeholder.com/130/64b5f6/ffffff?text=OA" class="student-image">
                     <h3>Osama Ahmed</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Eyad Ali" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/90caf9/ffffff?text=EA" >
+                    <img src="https://via.placeholder.com/130/90caf9/ffffff?text=EA" class="student-image">
                     <h3>Eyad Ali</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Hazem Mohamed" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/1e88e5/ffffff?text=HM" >
+                    <img src="https://via.placeholder.com/130/1e88e5/ffffff?text=HM" class="student-image">
                     <h3>Hazem Mohamed</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Sajed Sherif" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/2196f3/ffffff?text=SS" >
+                    <img src="https://via.placeholder.com/130/2196f3/ffffff?text=SS" class="student-image">
                     <h3>Sajed Sherif</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Omar Elsayed" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/42a5f5/ffffff?text=OE">
+                    <img src="https://via.placeholder.com/130/42a5f5/ffffff?text=OE" class="student-image">
                     <h3>Omar Elsayed</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Malik Ahmed" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/64b5f6/ffffff?text=MA" >
+                    <img src="https://via.placeholder.com/130/64b5f6/ffffff?text=MA" class="student-image">
                     <h3>Malek Ahmed</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Mohamed Sameh" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/90caf9/ffffff?text=MS">
+                    <img src="https://via.placeholder.com/130/90caf9/ffffff?text=MS" class="student-image">
                     <h3>Mohamed Sameh</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Mohamed Abdelfatah" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/1e88e5/ffffff?text=MA" >
+                    <img src="https://via.placeholder.com/130/1e88e5/ffffff?text=MA" class="student-image">
                     <h3>Mohamed Abdelfatah</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Mahmoud Amr" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/2196f3/ffffff?text=MA">
+                    <img src="https://via.placeholder.com/130/2196f3/ffffff?text=MA" class="student-image">
                     <h3>Mahmoud Helal</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Yasen Fekry" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/42a5f5/ffffff?text=YF" >
+                    <img src="https://via.placeholder.com/130/42a5f5/ffffff?text=YF" class="student-image">
                     <h3>Yassin Fekry</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Jana Reda" data-info="Proud member of the 8A family!">
-                    <img src="images\janareda.png" >
+                    <img src="images\janareda.png" class="student-image">
                     <h3>Jana Reda</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Jessica Mina" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/90caf9/ffffff?text=JM" >
+                    <img src="https://via.placeholder.com/130/90caf9/ffffff?text=JM" class="student-image">
                     <h3>Jessica Mina</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Ritaj Mohamed" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/1e88e5/ffffff?text=RM" >
+                    <img src="https://via.placeholder.com/130/1e88e5/ffffff?text=RM" class="student-image">
                     <h3>Ritaj Mohamed</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Rital Waleed" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/2196f3/ffffff?text=RW" >
+                    <img src="https://via.placeholder.com/130/2196f3/ffffff?text=RW" class="student-image">
                     <h3>Rital Waleed</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Sara Adel" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/42a5f5/ffffff?text=SA" >
+                    <img src="https://via.placeholder.com/130/42a5f5/ffffff?text=SA" class="student-image">
                     <h3>Sara Adel</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Sama Hossam" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/64b5f6/ffffff?text=SH" >
+                    <img src="https://via.placeholder.com/130/64b5f6/ffffff?text=SH" class="student-image">
                     <h3>Sama Hossam</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Farah Ahmed" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/90caf9/ffffff?text=FA">
+                    <img src="https://via.placeholder.com/130/90caf9/ffffff?text=FA" class="student-image">
                     <h3>Farah Ahmed</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Marley Remon" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/1e88e5/ffffff?text=MR" >
+                    <img src="https://via.placeholder.com/130/1e88e5/ffffff?text=MR" class="student-image">
                     <h3>Marly Remon</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Marley Michael" data-info="Proud member of the 8A family!">
-                    <img src="images\مارليمايكل.png" >
+                    <img src="images\مارليمايكل.png" class="student-image">
                     <h3>Marly Michael</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
                 <div class="card gentle-lift-effect" data-student="Merola Samuel" data-info="Proud member of the 8A family!">
-                    <img src="https://via.placeholder.com/100/42a5f5/ffffff?text=MS" >
+                    <img src="https://via.placeholder.com/130/42a5f5/ffffff?text=MS" class="student-image">
                     <h3>Merolla Samuel</h3>
                     <div class="student-info">Student in 8A</div>
                 </div>
@@ -321,75 +747,89 @@
         </section>
 
         <!-- Teachers Section -->
-        <section id="teachers" class="creative-bg">
-            <h2>Our Superhero Teachers</h2>
+        <section id="teachers" class="creative-bg fade-in-up">
+            <h2 class="text-shimmer">Our Superhero Teachers</h2>
             <div class="grid">
-                <div class="teacher-card">
+                <div class="teacher-card floating">
+                    <img src="https://via.placeholder.com/100/009688/ffffff?text=IH" class="teacher-image" alt="Ms. Iman Hassan">
                     <h3>Ms. Iman Hassan</h3>
                     <p>Growing green thumbs! 🌱</p>
                     <div class="teacher-subject">Agriculture</div>
                 </div>
-                <div class="teacher-card">
+                <div class="teacher-card floating">
+                    <img src="https://via.placeholder.com/100/009688/ffffff?text=MA" class="teacher-image" alt="Ms. Marwa Abdulaziz">
                     <h3>Ms. Marwa Abdulaziz</h3>
                     <p>Master of money matters! 💰</p>
                     <div class="teacher-subject">Economics</div>
                 </div>
-                <div class="teacher-card">
+                <div class="teacher-card floating">
+                    <img src="https://via.placeholder.com/100/009688/ffffff?text=MM" class="teacher-image" alt="Mr. Magdy Mahmoud">
                     <h3>Mr. Magdy Mahmoud</h3>
                     <p>Building future creators! 🔨</p>
                     <div class="teacher-subject">Industry</div>
                 </div>
-                <div class="teacher-card">
+                <div class="teacher-card floating">
+                    <img src="https://via.placeholder.com/100/009688/ffffff?text=MS" class="teacher-image" alt="Mr. Mohamed Al-Saadi">
                     <h3>Mr. Mohamed Al-Saadi</h3>
                     <p>Math magician! ✨</p>
                     <div class="teacher-subject">Mathematics</div>
                 </div>
-                <div class="teacher-card">
+                <div class="teacher-card floating">
+                    <img src="https://via.placeholder.com/100/009688/ffffff?text=HK" class="teacher-image" alt="Ms. Hanem Kamel">
                     <h3>Ms. Hanem Kamel</h3>
                     <p>Language and soul explorer! 📚</p>
                     <div class="teacher-subject">Arabic & Religion</div>
                 </div>
-                <div class="teacher-card">
+                <div class="teacher-card floating">
+                    <img src="https://via.placeholder.com/100/009688/ffffff?text=OH" class="teacher-image" alt="Mr. Omar Hammad">
                     <h3>Mr. Omar Hammad</h3>
                     <p>English adventure guide! 🗺️</p>
                     <div class="teacher-subject">English</div>
                 </div>
-                <div class="teacher-card">
+                <div class="teacher-card floating">
+                    <img src="https://via.placeholder.com/100/009688/ffffff?text=SS" class="teacher-image" alt="Ms. Seham Shafik">
                     <h3>Ms. Seham Shafik</h3>
                     <p>Creative expression coach! 🎨</p>
                     <div class="teacher-subject">Arts</div>
                 </div>
-                <div class="teacher-card">
+                <div class="teacher-card floating">
+                    <img src="https://via.placeholder.com/100/009688/ffffff?text=HS" class="teacher-image" alt="Ms. Hanan Al-Sayed">
                     <h3>Ms. Hanan Al-Sayed</h3>
                     <p>Science discoverer! 🔬</p>
                     <div class="teacher-subject">Science</div>
                 </div>
-                <div class="teacher-card">
+                <div class="teacher-card floating">
+                    <img src="https://via.placeholder.com/100/009688/ffffff?text=OZ" class="teacher-image" alt="Ms. Ola Zakaria">
                     <h3>Ms. Ola Zakaria</h3>
                     <p>Knowledge navigator! 🧭</p>
                     <div class="teacher-subject">Studies</div>
                 </div>
-                <div class="teacher-card">
+                <div class="teacher-card floating">
+                    <img src="https://via.placeholder.com/100/009688/ffffff?text=G" class="teacher-image" alt="Ms. Giovanna">
                     <h3>Ms. Giovanna</h3>
                     <p>Faith and values mentor! 🙏</p>
                     <div class="teacher-subject">Christian Religion</div>
                 </div>
-                <div class="teacher-card">
+                <div class="teacher-card floating">
+                    <img src="https://via.placeholder.com/100/009688/ffffff?text=HE" class="teacher-image" alt="Ms. Hanan Al-Sayed">
                     <h3>Ms. Hanan Al-Sayed</h3>
                     <p>Future business builder! 💼</p>
                     <div class="teacher-subject">Entrepreneurship</div>
                 </div>
-                <div class="teacher-card">
+                <div class="teacher-card floating">
+                    <img src="https://via.placeholder.com/100/009688/ffffff?text=CS" class="teacher-image" alt="Ms. Cecile Saad">
                     <h3>Ms. Cecile Saad</h3>
                     <p>French language artist! 🇫🇷</p>
                     <div class="teacher-subject">French</div>
                 </div>
-                <div class="teacher-card">
+                <div class="teacher-card floating">
+                    <img src="https://via.placeholder.com/100/009688/ffffff?text=AS" class="teacher-image" alt="Mr. Ahmed Samir">
                     <h3>Mr. Ahmed Samir</h3>
                     <p>German language expert! 🇩🇪</p>
                     <div class="teacher-subject">German</div>
                 </div>
-                <div class="teacher-card">
+                <div class="teacher-card floating">
+                    <img src="https://via.placeholder.com/100/009688/ffffff?text=HK" class="teacher-image" alt="Ms. Hanan Mohamed Karim">
                     <h3>Ms. Hanan Mohamed Karim</h3>
                     <p>Tech wizard! 💻</p>
                     <div class="teacher-subject">ICT</div>
@@ -398,8 +838,8 @@
         </section>
 
         <!-- Schedule Section -->
-        <section id="schedule" class="creative-bg">
-            <h2>Our Weekly Adventure Plan</h2>
+        <section id="schedule" class="creative-bg fade-in-up">
+            <h2 class="text-shimmer">Our Weekly Adventure Plan</h2>
             <div class="schedule-container">
                 <table class="schedule-table">
                     <thead>
@@ -492,21 +932,42 @@
     <div class="back-to-top" id="backToTop">↑</div>
 
     <script src="script.js"></script>
+    <script>
+        // تأثير شريط التنقل المتقلص
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 100) {
+                header.classList.add('compact');
+            } else {
+                header.classList.remove('compact');
+            }
+        });
+
+        // تأثيرات إضافية عند التمرير
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.floating-element');
+            
+            parallaxElements.forEach(function(element, index) {
+                const speed = 0.5 + (index * 0.1);
+                element.style.transform = `translateY(${scrolled * speed * 0.1}px)`;
+            });
+        });
+
+        // تأثيرات عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            // تأثيرات دخول العناصر
+            const elements = document.querySelectorAll('.fade-in-up');
+            elements.forEach(function(element, index) {
+                element.style.animationDelay = `${index * 0.2}s`;
+            });
+            
+            // تأثيرات للبطاقات
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(function(card, index) {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
